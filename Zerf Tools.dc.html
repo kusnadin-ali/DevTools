@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,900&amp;family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet">
+<style>
+@keyframes stampIn{0%{transform:rotate(0deg) scale(0.8);opacity:0}100%{transform:rotate(-6deg) scale(1);opacity:1}}
+body{margin:0;-webkit-font-smoothing:antialiased}
+.zerf-toolnav{scrollbar-width:none;}
+.zerf-toolnav::-webkit-scrollbar{display:none;}
+a{color:#FF5722}
+a:hover{color:#D84315}
+::selection{background:#FF5722;color:#F5F5F5}
+</style>
+</helmet>
+
+<div style="background:{{ rootBg }};min-height:100vh;font-family:'Inter',sans-serif;color:{{ rootText }};position:relative;overflow:hidden;background-image:radial-gradient({{ grainColor }} 1px, transparent 1px);background-size:3px 3px;transition:background 0.2s ease,color 0.2s ease;">
+
+  <!-- HEADER -->
+  <header style="display:flex;align-items:center;gap:28px;padding:14px 32px;background:#303841;position:relative;z-index:2;">
+    <div style="display:flex;align-items:center;gap:9px;flex:none;">
+      <div style="position:relative;width:28px;height:28px;display:flex;align-items:center;justify-content:center;flex:none;">
+        <div style="position:absolute;width:22px;height:22px;background:#FF5722;transform:rotate(12deg);border-radius:4px;"></div>
+        <span style="position:relative;font-family:'Fraunces',serif;font-weight:900;font-size:15px;color:#F5F5F5;">Z</span>
+      </div>
+      <span style="font-family:'Fraunces',serif;font-weight:700;font-size:17px;letter-spacing:-0.01em;color:#F5F5F5;white-space:nowrap;">Zerf<span style="color:#FF5722;">.tools</span></span>
+    </div>
+
+    <div style="width:1px;height:20px;background:rgba(245,245,245,0.15);flex:none;"></div>
+
+    <nav class="zerf-toolnav" style="display:flex;align-items:center;gap:22px;flex:1;min-width:0;overflow-x:auto;">
+      <a href="#tool-0" style="text-decoration:none;color:rgba(245,245,245,0.75);font-size:13.5px;font-weight:500;display:flex;align-items:center;gap:7px;white-space:nowrap;flex:none;transition:color 0.15s ease;" style-hover="color:#FF5722;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3c-2 0-2 2-2 4s0 3-2 3c2 0 2 1 2 3s0 4 2 4"></path><path d="M16 3c2 0 2 2 2 4s0 3 2 3c-2 0-2 1-2 3s0 4-2 4"></path></svg>
+        JSON Formatter
+      </a>
+      <a href="#tool-1" style="text-decoration:none;color:rgba(245,245,245,0.75);font-size:13.5px;font-weight:500;display:flex;align-items:center;gap:7px;white-space:nowrap;flex:none;transition:color 0.15s ease;" style-hover="color:#FF5722;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4v16M8 4l-3 3M8 4l3 3"></path><path d="M16 20V4M16 20l-3-3M16 20l3 3"></path></svg>
+        JSON Diff
+      </a>
+      <a href="#tool-2" style="text-decoration:none;color:rgba(245,245,245,0.75);font-size:13.5px;font-weight:500;display:flex;align-items:center;gap:7px;white-space:nowrap;flex:none;transition:color 0.15s ease;" style-hover="color:#FF5722;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"></rect><path d="M8 11V7a4 4 0 018 0v4"></path></svg>
+        Base64 Encoder
+      </a>
+      <a href="#tool-3" style="text-decoration:none;color:rgba(245,245,245,0.75);font-size:13.5px;font-weight:500;display:flex;align-items:center;gap:7px;white-space:nowrap;flex:none;transition:color 0.15s ease;" style-hover="color:#FF5722;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"></rect><circle cx="8" cy="10" r="1.4"></circle><path d="M3 16l5-5 4 4 3-3 6 6"></path></svg>
+        Image Converter
+      </a>
+      <a href="#tool-4" style="text-decoration:none;color:rgba(245,245,245,0.75);font-size:13.5px;font-weight:500;display:flex;align-items:center;gap:7px;white-space:nowrap;flex:none;transition:color 0.15s ease;" style-hover="color:#FF5722;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="17" r="3"></circle><circle cx="17" cy="7" r="3"></circle><path d="M9 15l6-6"></path></svg>
+        URL Encoder
+      </a>
+      <a href="#tool-5" style="text-decoration:none;color:rgba(245,245,245,0.75);font-size:13.5px;font-weight:500;display:flex;align-items:center;gap:7px;white-space:nowrap;flex:none;transition:color 0.15s ease;" style-hover="color:#FF5722;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"></circle><path d="M12 12V7M12 12l4 2"></path></svg>
+        Timestamp Converter
+      </a>
+      <a href="#tool-6" style="text-decoration:none;color:rgba(245,245,245,0.75);font-size:13.5px;font-weight:500;display:flex;align-items:center;gap:7px;white-space:nowrap;flex:none;transition:color 0.15s ease;" style-hover="color:#FF5722;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 19L17 5"></path><circle cx="7" cy="19" r="1.3" fill="currentColor" stroke="none"></circle><circle cx="17" cy="5" r="1.3" fill="currentColor" stroke="none"></circle></svg>
+        Regex Tester
+      </a>
+      <a href="#tool-7" style="text-decoration:none;color:rgba(245,245,245,0.75);font-size:13.5px;font-weight:500;display:flex;align-items:center;gap:7px;white-space:nowrap;flex:none;transition:color 0.15s ease;" style-hover="color:#FF5722;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="1.5"></rect><path d="M8 8h8M8 12h5M8 16h3"></path></svg>
+        Markdown Previewer
+      </a>
+      <a href="#tool-8" style="text-decoration:none;color:rgba(245,245,245,0.75);font-size:13.5px;font-weight:500;display:flex;align-items:center;gap:7px;white-space:nowrap;flex:none;transition:color 0.15s ease;" style-hover="color:#FF5722;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"></circle><circle cx="9" cy="10" r="1.3" fill="currentColor" stroke="none"></circle><circle cx="15" cy="10" r="1.3" fill="currentColor" stroke="none"></circle><circle cx="12" cy="15" r="1.3" fill="currentColor" stroke="none"></circle></svg>
+        Color Palette Extractor
+      </a>
+    </nav>
+
+    <div style="display:flex;align-items:center;gap:14px;flex:none;">
+      <span style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:rgba(245,245,245,0.8);">ID</span>
+      <span style="color:rgba(245,245,245,0.4);font-size:14px;"><br></span>
+      <div onClick="{{ toggleTheme }}" style="width:30px;height:30px;border:1.5px solid rgba(245,245,245,0.35);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none;">
+        <sc-if value="{{ isDark }}">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F5F5F5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M2 12h2M20 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"></path></svg>
+        </sc-if>
+        <sc-if value="{{ isLight }}">
+          <div style="width:12px;height:12px;border-radius:50%;border:1.5px solid #F5F5F5;position:relative;overflow:hidden;">
+            <div style="position:absolute;right:-1px;top:-1px;width:8px;height:14px;background:#303841;border-radius:50%;"></div>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section style="position:relative;padding:88px 48px 96px;text-align:center;display:flex;flex-direction:column;align-items:center;">
+    <div style="position:absolute;top:40px;right:8%;width:130px;height:130px;background-image:radial-gradient(#76ABAE 1.5px, transparent 1.5px);background-size:14px 14px;opacity:0.35;"></div>
+    <div style="position:absolute;bottom:20px;left:6%;width:110px;height:110px;background-image:radial-gradient(#FF5722 1.5px, transparent 1.5px);background-size:12px 12px;opacity:0.3;"></div>
+
+    <div style="display:inline-flex;align-items:center;justify-content:center;width:74px;height:74px;border:2px dashed #FF5722;border-radius:50%;transform:rotate(-6deg);animation:stampIn 0.5s ease-out;margin-bottom:28px;">
+      <span style="font-family:'JetBrains Mono',monospace;font-weight:700;font-size:12px;color:#FF5722;letter-spacing:0.02em;">v1.0</span>
+    </div>
+
+    <h1 style="font-family:'Fraunces',serif;font-weight:900;font-size:56px;line-height:1.08;letter-spacing:-0.015em;max-width:780px;margin:0 0 20px;text-wrap:pretty;">
+      Klasik di tampilan,<br>modern di dalam.
+    </h1>
+    <p style="font-size:18px;color:{{ textSecondary }};max-width:520px;line-height:1.6;margin:0 0 36px;text-wrap:pretty;">
+      Kumpulan utilitas developer yang berjalan sepenuhnya di browser kamu — cepat, privat, dan gratis. Tanpa server, tanpa data yang bocor.
+    </p>
+
+    <a href="#tools" style="text-decoration:none;display:inline-flex;align-items:center;gap:8px;background:#FF5722;color:#F5F5F5;font-weight:700;font-size:16px;padding:14px 28px;border-radius:8px;box-shadow:0 4px 0 #D84315;transform:translateY(0);transition:all 0.15s ease;" style-hover="transform:translateY(2px);box-shadow:0 2px 0 #D84315;">
+      Jelajahi Tools <span>→</span>
+    </a>
+  </section>
+
+  <!-- TOOLS GRID -->
+  <section id="tools" style="padding:64px 48px 88px;position:relative;z-index:1;">
+    <div style="display:flex;align-items:baseline;gap:14px;justify-content:center;margin-bottom:44px;">
+      <div style="width:36px;height:2px;background:{{ dividerColor }};"></div>
+      <h2 style="font-family:'Fraunces',serif;font-weight:700;font-size:32px;margin:0;">Available Tools</h2>
+      <div style="width:36px;height:2px;background:{{ dividerColor }};"></div>
+    </div>
+
+    <div style="max-width:1080px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:28px;">
+      <sc-for list="{{ tools }}" as="tool" hint-placeholder-count="6">
+        <div id="tool-{{ $index }}" style="position:relative;background:{{ cardBg }};border:1.5px solid {{ cardBorder }};border-radius:12px;padding:26px 24px;display:flex;flex-direction:column;gap:14px;box-shadow:0 3px 10px rgba(48,56,65,0.1);transition:transform 0.18s ease, box-shadow 0.18s ease, background 0.2s ease, border-color 0.2s ease;" style-hover="transform:translateY(-4px);box-shadow:0 8px 20px rgba(48,56,65,0.16);">
+          <div style="position:absolute;inset:5px;border:1px solid {{ cardInnerBorder }};border-radius:8px;pointer-events:none;"></div>
+
+          <sc-if value="{{ tool.badge }}">
+            <div style="position:absolute;top:-12px;right:16px;background:{{ rootBg }};border:1.5px dashed {{ tool.badgeColor }};color:{{ tool.badgeColor }};font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:0.08em;padding:4px 9px;border-radius:20px;transform:rotate(-4deg);">{{ tool.badge }}</div>
+          </sc-if>
+
+          <div style="display:flex;align-items:center;gap:14px;">
+            <div style="width:44px;height:44px;border-radius:8px;border:1.5px solid {{ tool.iconColor }};display:flex;align-items:center;justify-content:center;flex:none;transition:background 0.15s ease, color 0.15s ease;">
+              <div style="width:16px;height:16px;background:{{ tool.iconColor }};border-radius:{{ tool.iconShape }};"></div>
+            </div>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:700;letter-spacing:0.09em;text-transform:uppercase;color:{{ tagText }};background:{{ tagBg }};padding:4px 8px;border-radius:4px;">{{ tool.tag }}</span>
+          </div>
+
+          <h3 style="font-family:'Fraunces',serif;font-weight:600;font-size:20px;margin:0;">{{ tool.name }}</h3>
+          <p style="font-size:14.5px;color:{{ textSecondary }};line-height:1.55;margin:0;flex:1;">{{ tool.desc }}</p>
+
+          <a href="{{ tool.href }}" style="text-decoration:none;font-weight:700;font-size:14px;color:#FF5722;display:inline-flex;align-items:center;gap:6px;border-bottom:2px solid transparent;width:fit-content;transition:border-color 0.15s ease;" style-hover="border-color:#FF5722;">
+            Buka Tool <span>→</span>
+          </a>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer style="padding:40px 48px;display:flex;align-items:center;justify-content:space-between;border-top:2px solid {{ footerBorder }};flex-wrap:wrap;gap:20px;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <div style="width:22px;height:22px;background:#FF5722;transform:rotate(12deg);border-radius:3px;position:relative;">
+        <span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;transform:rotate(-12deg);font-family:'Fraunces',serif;font-weight:900;font-size:12px;color:#F5F5F5;">Z</span>
+      </div>
+      <span style="font-family:'Fraunces',serif;font-weight:700;font-size:15px;">Zerf Tools</span>
+    </div>
+    <div style="display:flex;gap:28px;">
+      <a href="#tools" style="text-decoration:none;color:{{ footerText }};font-size:13.5px;font-weight:600;">Tools</a>
+      <a href="#" style="text-decoration:none;color:{{ footerText }};font-size:13.5px;font-weight:600;">GitHub</a>
+    </div>
+    <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:{{ footerText }};">© 2026 Zerf Tools</span>
+  </footer>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { isDark: false };
+  renderVals() {
+    const isDark = this.state.isDark;
+    const theme = isDark ? {
+      rootBg: '#20262B', rootText: '#F5F5F5', textSecondary: 'rgba(245,245,245,0.62)',
+      cardBg: '#2A3138', cardBorder: 'rgba(245,245,245,0.16)', cardInnerBorder: 'rgba(245,245,245,0.1)',
+      tagBg: 'rgba(245,245,245,0.08)', tagText: 'rgba(245,245,245,0.55)',
+      dividerColor: 'rgba(245,245,245,0.22)', footerBorder: 'rgba(245,245,245,0.15)', footerText: 'rgba(245,245,245,0.6)',
+      grainColor: 'rgba(245,245,245,0.045)',
+    } : {
+      rootBg: '#F5F5F5', rootText: '#303841', textSecondary: 'rgba(48,56,65,0.65)',
+      cardBg: '#FFFFFF', cardBorder: 'rgba(48,56,65,0.18)', cardInnerBorder: 'rgba(48,56,65,0.12)',
+      tagBg: 'rgba(48,56,65,0.06)', tagText: 'rgba(48,56,65,0.6)',
+      dividerColor: 'rgba(48,56,65,0.25)', footerBorder: 'rgba(48,56,65,0.15)', footerText: 'rgba(48,56,65,0.65)',
+      grainColor: 'rgba(48,56,65,0.035)',
+    };
+
+    const tools = [
+      {name:'JSON Formatter', desc:'Validasi, format, dan minify JSON secara instan.', tag:'JSON', iconColor:'#FF5722', iconShape:'3px', badge:'POPULAR', badgeColor:'#FF5722'},
+      {name:'JSON Diff', desc:'Bandingkan dua JSON berdampingan, lihat perubahan.', tag:'JSON', iconColor:'#76ABAE', iconShape:'50%'},
+      {name:'Base64 Encoder', desc:'Encode dan decode teks atau file ke Base64.', tag:'ENCODE', iconColor:'#303841', iconShape:'2px', badge:'NEW', badgeColor:'#76ABAE'},
+      {name:'Image Converter', desc:'Konversi gambar antar format PNG, JPG, WebP.', tag:'IMAGE', iconColor:'#76ABAE', iconShape:'50%'},
+      {name:'URL Encoder', desc:'Encode dan decode URL dengan aman dan cepat.', tag:'ENCODE', iconColor:'#303841', iconShape:'3px'},
+      {name:'Timestamp Converter', desc:'Konversi Unix timestamp ke tanggal, dan sebaliknya.', tag:'TIME', iconColor:'#FF5722', iconShape:'50%'},
+      {name:'Regex Tester', desc:'Uji ekspresi reguler dengan highlight hasil langsung.', tag:'DEV', iconColor:'#76ABAE', iconShape:'2px', badge:'BETA', badgeColor:'#303841'},
+      {name:'Markdown Previewer', desc:'Tulis markdown, lihat hasil render seketika.', tag:'DOC', iconColor:'#303841', iconShape:'2px'},
+      {name:'Color Palette Extractor', desc:'Ekstrak palet warna dominan dari sebuah gambar.', tag:'DESIGN', iconColor:'#FF5722', iconShape:'50%'},
+    ].map((t, i) => ({ ...t, anchor: '#tool-' + i, href: '#' }));
+    tools[0].href = './JSON Formatter.dc.html';
+
+    return {
+      tools,
+      ...theme,
+      isDark,
+      isLight: !isDark,
+      toggleTheme: () => this.setState(s => ({ isDark: !s.isDark })),
+    };
+  }
+}
+</script>
+</body>
+</html>

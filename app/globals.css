@@ -1,0 +1,84 @@
+@import "tailwindcss";
+
+:root {
+  --color-root-bg: #F5F5F5;
+  --color-root-text: #303841;
+  --color-text-secondary: rgba(48, 56, 65, 0.65);
+  --color-card-bg: #FFFFFF;
+  --color-card-border: rgba(48, 56, 65, 0.18);
+  --color-card-inner-border: rgba(48, 56, 65, 0.12);
+  --color-tag-bg: rgba(48, 56, 65, 0.06);
+  --color-tag-text: rgba(48, 56, 65, 0.6);
+  --color-divider: rgba(48, 56, 65, 0.25);
+  --color-footer-border: rgba(48, 56, 65, 0.15);
+  --color-footer-text: rgba(48, 56, 65, 0.65);
+  --color-grain: rgba(48, 56, 65, 0.035);
+}
+
+.dark {
+  --color-root-bg: #20262B;
+  --color-root-text: #F5F5F5;
+  --color-text-secondary: rgba(245, 245, 245, 0.62);
+  --color-card-bg: #2A3138;
+  --color-card-border: rgba(245, 245, 245, 0.16);
+  --color-card-inner-border: rgba(245, 245, 245, 0.1);
+  --color-tag-bg: rgba(245, 245, 245, 0.08);
+  --color-tag-text: rgba(245, 245, 245, 0.55);
+  --color-divider: rgba(245, 245, 245, 0.22);
+  --color-footer-border: rgba(245, 245, 245, 0.15);
+  --color-footer-text: rgba(245, 245, 245, 0.6);
+  --color-grain: rgba(245, 245, 245, 0.045);
+}
+
+@theme inline {
+  --color-root-bg: var(--color-root-bg);
+  --color-root-text: var(--color-root-text);
+  --color-text-secondary: var(--color-text-secondary);
+  --color-card-bg: var(--color-card-bg);
+  --color-card-border: var(--color-card-border);
+  --color-card-inner-border: var(--color-card-inner-border);
+  --color-tag-bg: var(--color-tag-bg);
+  --color-tag-text: var(--color-tag-text);
+  --color-divider: var(--color-divider);
+  --color-footer-border: var(--color-footer-border);
+  --color-footer-text: var(--color-footer-text);
+  --color-grain: var(--color-grain);
+
+  --color-accent: #FF5722;
+  --color-accent-dark: #D84315;
+  --color-header: #303841;
+  --color-teal: #76ABAE;
+
+  --font-sans: var(--font-inter);
+  --font-fraunces: var(--font-fraunces);
+  --font-mono: var(--font-jbmono);
+}
+
+@keyframes stampIn {
+  0% { transform: rotate(0deg) scale(0.8); opacity: 0; }
+  100% { transform: rotate(-6deg) scale(1); opacity: 1; }
+}
+
+body {
+  background-color: var(--color-root-bg);
+  color: var(--color-root-text);
+  -webkit-font-smoothing: antialiased;
+  background-image: radial-gradient(var(--color-grain) 1px, transparent 1px);
+  background-size: 3px 3px;
+}
+
+::selection {
+  background: #FF5722;
+  color: #F5F5F5;
+}
+
+textarea {
+  outline: none;
+}
+
+.zerf-toolnav {
+  scrollbar-width: none;
+}
+.zerf-toolnav::-webkit-scrollbar {
+  display: none;
+}

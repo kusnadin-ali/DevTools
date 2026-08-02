@@ -3,6 +3,8 @@
 import { useRef, useState } from "react";
 import ToolPageShell from "@/components/ToolPageShell";
 import Button from "@/components/Button";
+import LineNumberGutter from "@/components/LineNumberGutter";
+import NumberedText from "@/components/NumberedText";
 import { tools } from "@/lib/tools";
 
 function toBase64(text: string): string {
@@ -26,6 +28,7 @@ export default function Base64EncoderPage() {
   const [error, setError] = useState("");
   const [copyLabel, setCopyLabel] = useState("Copy");
   const copyTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const inputGutterRef = useRef<HTMLDivElement>(null);
 
   function encode() {
     if (!input) {
@@ -68,7 +71,7 @@ export default function Base64EncoderPage() {
   }
 
   const outputDisplay = error ? `⚠ ${error}` : output;
-  const outputBorder = error ? "var(--color-accent)" : "rgba(48,56,65,0.18)";
+  const outputBorder = error ? "var(--color-accent)" : "var(--color-card-border)";
 
   return (
     <ToolPageShell tool={tool}>
@@ -92,12 +95,19 @@ export default function Base64EncoderPage() {
           <span className="font-mono text-[11px] font-bold uppercase tracking-[0.08em] text-text-secondary">
             Input
           </span>
-          <textarea
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Tulis teks atau tempel Base64 di sini..."
-            className="box-border h-[440px] w-full resize-none rounded-[10px] border-[1.5px] border-card-border bg-white p-4 font-mono text-[13.5px] leading-relaxed text-[#303841] shadow-[0_3px_10px_rgba(48,56,65,0.06)]"
-          />
+          <div className="flex h-[440px] w-full overflow-hidden rounded-[10px] border-[1.5px] border-card-border bg-card-bg shadow-[0_3px_10px_rgba(48,56,65,0.06)]">
+            <LineNumberGutter ref={inputGutterRef} lineCount={input.split("\n").length} />
+            <textarea
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onScroll={(e) => {
+                if (inputGutterRef.current) inputGutterRef.current.scrollTop = e.currentTarget.scrollTop;
+              }}
+              placeholder="Tulis teks atau tempel Base64 di sini..."
+              spellCheck={false}
+              className="flex-1 resize-none overflow-auto whitespace-pre-wrap break-words bg-transparent py-4 pr-4 pl-2.5 font-mono text-[13.5px] leading-relaxed text-root-text outline-none"
+            />
+          </div>
         </div>
         <div className="flex flex-col gap-2">
           <span
@@ -107,13 +117,18 @@ export default function Base64EncoderPage() {
           >
             {error ? "Error" : "Output"}
           </span>
-          <textarea
-            readOnly
-            value={outputDisplay}
-            placeholder="Hasil akan tampil di sini..."
+          <div
             style={{ borderColor: outputBorder }}
-            className="box-border h-[440px] w-full resize-none rounded-[10px] border-[1.5px] bg-[#303841] p-4 font-mono text-[13.5px] leading-relaxed text-[#F5F5F5] shadow-[0_3px_10px_rgba(48,56,65,0.06)]"
-          />
+            className="box-border h-[440px] w-full overflow-auto rounded-[10px] border-[1.5px] bg-card-bg shadow-[0_3px_10px_rgba(48,56,65,0.06)]"
+          >
+            {outputDisplay ? (
+              <NumberedText text={outputDisplay} accent={!!error} />
+            ) : (
+              <span className="mt-4 block px-4 font-mono text-[13.5px] text-text-secondary/50">
+                Hasil akan tampil di sini...
+              </span>
+            )}
+          </div>
         </div>
       </div>
     </ToolPageShell>

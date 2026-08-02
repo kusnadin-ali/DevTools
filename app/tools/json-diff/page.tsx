@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { diffLines, type Change } from "diff";
 import ToolPageShell from "@/components/ToolPageShell";
 import Button from "@/components/Button";
+import LineNumberGutter from "@/components/LineNumberGutter";
 import { tools } from "@/lib/tools";
 
 const DEFAULT_LEFT = `{
@@ -18,6 +19,16 @@ const DEFAULT_RIGHT = `{
   "active": true,
   "beta": true
 }`;
+
+function diffRows(diff: Change[]): { type: "added" | "removed" | "same"; text: string }[] {
+  return diff.flatMap((part) => {
+    const type = part.added ? "added" : part.removed ? "removed" : "same";
+    return part.value
+      .replace(/\n$/, "")
+      .split("\n")
+      .map((text) => ({ type, text }) as const);
+  });
+}
 
 function safeStringify(value: string): { text?: string; error?: string } {
   if (!value.trim()) return { text: "" };
@@ -35,6 +46,9 @@ export default function JsonDiffPage() {
   const [right, setRight] = useState(DEFAULT_RIGHT);
   const [error, setError] = useState("");
   const [diff, setDiff] = useState<Change[] | null>(null);
+  const leftGutterRef = useRef<HTMLDivElement>(null);
+  const rightGutterRef = useRef<HTMLDivElement>(null);
+  const diffGutterRef = useRef<HTMLDivElement>(null);
 
   function compare() {
     const a = safeStringify(left);
@@ -68,23 +82,37 @@ export default function JsonDiffPage() {
           <span className="font-mono text-[11px] font-bold uppercase tracking-[0.08em] text-text-secondary">
             JSON A
           </span>
-          <textarea
-            value={left}
-            onChange={(e) => setLeft(e.target.value)}
-            placeholder="Tempel JSON pertama..."
-            className="box-border h-[280px] w-full resize-none rounded-[10px] border-[1.5px] border-card-border bg-white p-4 font-mono text-[13.5px] leading-relaxed text-[#303841] shadow-[0_3px_10px_rgba(48,56,65,0.06)]"
-          />
+          <div className="flex h-[280px] w-full overflow-hidden rounded-[10px] border-[1.5px] border-card-border bg-card-bg shadow-[0_3px_10px_rgba(48,56,65,0.06)]">
+            <LineNumberGutter ref={leftGutterRef} lineCount={left.split("\n").length} />
+            <textarea
+              value={left}
+              onChange={(e) => setLeft(e.target.value)}
+              onScroll={(e) => {
+                if (leftGutterRef.current) leftGutterRef.current.scrollTop = e.currentTarget.scrollTop;
+              }}
+              placeholder="Tempel JSON pertama..."
+              spellCheck={false}
+              className="flex-1 resize-none overflow-auto whitespace-pre-wrap break-words bg-transparent py-4 pr-4 pl-2.5 font-mono text-[13.5px] leading-relaxed text-root-text outline-none"
+            />
+          </div>
         </div>
         <div className="flex flex-col gap-2">
           <span className="font-mono text-[11px] font-bold uppercase tracking-[0.08em] text-text-secondary">
             JSON B
           </span>
-          <textarea
-            value={right}
-            onChange={(e) => setRight(e.target.value)}
-            placeholder="Tempel JSON kedua..."
-            className="box-border h-[280px] w-full resize-none rounded-[10px] border-[1.5px] border-card-border bg-white p-4 font-mono text-[13.5px] leading-relaxed text-[#303841] shadow-[0_3px_10px_rgba(48,56,65,0.06)]"
-          />
+          <div className="flex h-[280px] w-full overflow-hidden rounded-[10px] border-[1.5px] border-card-border bg-card-bg shadow-[0_3px_10px_rgba(48,56,65,0.06)]">
+            <LineNumberGutter ref={rightGutterRef} lineCount={right.split("\n").length} />
+            <textarea
+              value={right}
+              onChange={(e) => setRight(e.target.value)}
+              onScroll={(e) => {
+                if (rightGutterRef.current) rightGutterRef.current.scrollTop = e.currentTarget.scrollTop;
+              }}
+              placeholder="Tempel JSON kedua..."
+              spellCheck={false}
+              className="flex-1 resize-none overflow-auto whitespace-pre-wrap break-words bg-transparent py-4 pr-4 pl-2.5 font-mono text-[13.5px] leading-relaxed text-root-text outline-none"
+            />
+          </div>
         </div>
       </div>
 
@@ -96,35 +124,36 @@ export default function JsonDiffPage() {
         >
           {error ? "Error" : "Perbedaan"}
         </span>
-        <div className="box-border min-h-[200px] w-full overflow-auto whitespace-pre-wrap break-words rounded-[10px] border-[1.5px] border-card-border bg-[#303841] p-4 font-mono text-[13.5px] leading-relaxed text-[#F5F5F5] shadow-[0_3px_10px_rgba(48,56,65,0.06)]">
-          {error ? (
-            `⚠ ${error}`
-          ) : diff ? (
-            diff.map((part, i) => (
-              <div
-                key={i}
-                className={
-                  part.added
-                    ? "bg-[rgba(107,122,58,0.35)] text-[#B7D66B]"
-                    : part.removed
-                      ? "bg-[rgba(156,59,44,0.35)] text-[#FF8A75]"
-                      : "text-white/70"
-                }
-              >
-                {part.value
-                  .replace(/\n$/, "")
-                  .split("\n")
-                  .map((line, j) => (
-                    <div key={j}>
-                      {part.added ? "+ " : part.removed ? "- " : "  "}
-                      {line}
-                    </div>
-                  ))}
-              </div>
-            ))
-          ) : (
-            <span className="text-white/40">Klik Compare untuk melihat perbedaan...</span>
-          )}
+        <div className="flex min-h-[200px] w-full overflow-hidden rounded-[10px] border-[1.5px] border-card-border bg-card-bg shadow-[0_3px_10px_rgba(48,56,65,0.06)]">
+          <LineNumberGutter ref={diffGutterRef} lineCount={diff ? diffRows(diff).length : 1} />
+          <div
+            onScroll={(e) => {
+              if (diffGutterRef.current) diffGutterRef.current.scrollTop = e.currentTarget.scrollTop;
+            }}
+            className="flex-1 overflow-auto whitespace-pre-wrap break-words py-4 pr-4 pl-2.5 font-mono text-[13.5px] leading-relaxed text-root-text"
+          >
+            {error ? (
+              <span className="text-accent">⚠ {error}</span>
+            ) : diff ? (
+              diffRows(diff).map((row, i) => (
+                <div
+                  key={i}
+                  className={
+                    row.type === "added"
+                      ? "bg-[rgba(76,175,80,0.18)] text-inherit"
+                      : row.type === "removed"
+                        ? "bg-[rgba(244,67,54,0.18)] text-inherit"
+                        : "text-text-secondary"
+                  }
+                >
+                  {row.type === "added" ? "+ " : row.type === "removed" ? "- " : "  "}
+                  {row.text}
+                </div>
+              ))
+            ) : (
+              <span className="text-text-secondary/50">Klik Compare untuk melihat perbedaan...</span>
+            )}
+          </div>
         </div>
       </div>
     </ToolPageShell>

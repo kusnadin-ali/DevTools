@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useRef, useState, type ReactNode } from "react";
 import ToolPageShell from "@/components/ToolPageShell";
+import LineNumberGutter from "@/components/LineNumberGutter";
 import { tools } from "@/lib/tools";
 
 const DEFAULT_PATTERN = "\\b\\w+@\\w+\\.\\w+\\b";
@@ -21,23 +22,35 @@ function getMatches(
   }
 }
 
-function highlight(text: string, matches: RegExpMatchArray[]): ReactNode[] {
-  if (matches.length === 0) return [text];
-  const nodes: ReactNode[] = [];
-  let last = 0;
-  matches.forEach((m, i) => {
-    const start = m.index ?? 0;
-    const end = start + m[0].length;
-    if (start > last) nodes.push(text.slice(last, start));
-    nodes.push(
-      <mark key={i} className="rounded bg-[rgba(255,87,34,0.4)] text-inherit">
-        {m[0] || "​"}
-      </mark>
-    );
-    last = Math.max(end, last);
+/** Splits the test text into lines and highlights matches within each line —
+ * needed so a per-line gutter can be kept in sync. A match that spans a "\n"
+ * (only possible with the `s` flag) is clipped to the line it starts in.
+ * ponytail: clipping is a rare-case simplification, not full multi-line-match
+ * rendering, revisit if that ever becomes a real complaint. */
+function highlightLines(text: string, matches: RegExpMatchArray[]): ReactNode[][] {
+  const lines = text.split("\n");
+  let offset = 0;
+  return lines.map((line, li) => {
+    const nodes: ReactNode[] = [];
+    let last = 0;
+    matches.forEach((m, i) => {
+      const start = (m.index ?? 0) - offset;
+      const end = start + m[0].length;
+      if (end <= 0 || start >= line.length) return;
+      const clippedStart = Math.max(0, start);
+      const clippedEnd = Math.min(line.length, end);
+      if (clippedStart > last) nodes.push(line.slice(last, clippedStart));
+      nodes.push(
+        <mark key={`${li}-${i}`} className="rounded bg-[rgba(255,87,34,0.4)] text-inherit">
+          {line.slice(clippedStart, clippedEnd) || "​"}
+        </mark>
+      );
+      last = Math.max(clippedEnd, last);
+    });
+    if (last < line.length) nodes.push(line.slice(last));
+    offset += line.length + 1;
+    return nodes.length ? nodes : [line];
   });
-  if (last < text.length) nodes.push(text.slice(last));
-  return nodes;
 }
 
 const FLAG_OPTIONS: { flag: string; label: string }[] = [
@@ -52,6 +65,8 @@ export default function RegexTesterPage() {
   const [pattern, setPattern] = useState(DEFAULT_PATTERN);
   const [flags, setFlags] = useState("i");
   const [text, setText] = useState(DEFAULT_TEXT);
+  const textGutterRef = useRef<HTMLDivElement>(null);
+  const matchGutterRef = useRef<HTMLDivElement>(null);
 
   function toggleFlag(flag: string) {
     setFlags((cur) => (cur.includes(flag) ? cur.replace(flag, "") : cur + flag));
@@ -98,25 +113,44 @@ export default function RegexTesterPage() {
           <span className="font-mono text-[11px] font-bold uppercase tracking-[0.08em] text-text-secondary">
             Test String
           </span>
-          <textarea
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            placeholder="Tulis teks untuk diuji..."
-            className="box-border h-[300px] w-full resize-none rounded-[10px] border-[1.5px] border-card-border bg-white p-4 font-mono text-[13.5px] leading-relaxed text-[#303841] shadow-[0_3px_10px_rgba(48,56,65,0.06)]"
-          />
+          <div className="flex h-[300px] w-full overflow-hidden rounded-[10px] border-[1.5px] border-card-border bg-card-bg shadow-[0_3px_10px_rgba(48,56,65,0.06)]">
+            <LineNumberGutter ref={textGutterRef} lineCount={text.split("\n").length} />
+            <textarea
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              onScroll={(e) => {
+                if (textGutterRef.current) textGutterRef.current.scrollTop = e.currentTarget.scrollTop;
+              }}
+              placeholder="Tulis teks untuk diuji..."
+              spellCheck={false}
+              className="flex-1 resize-none overflow-auto whitespace-pre-wrap break-words bg-transparent py-4 pr-4 pl-2.5 font-mono text-[13.5px] leading-relaxed text-root-text outline-none"
+            />
+          </div>
         </div>
         <div className="flex flex-col gap-2">
           <span className="font-mono text-[11px] font-bold uppercase tracking-[0.08em] text-text-secondary">
             {matches.length} Match{matches.length === 1 ? "" : "es"}
           </span>
-          <div className="box-border h-[300px] w-full overflow-auto whitespace-pre-wrap break-words rounded-[10px] border-[1.5px] border-card-border bg-[#303841] p-4 font-mono text-[13.5px] leading-relaxed text-[#F5F5F5] shadow-[0_3px_10px_rgba(48,56,65,0.06)]">
-            {error ? (
-              <span className="text-white/40">Perbaiki pola regex untuk melihat hasil.</span>
-            ) : text ? (
-              highlight(text, matches)
-            ) : (
-              <span className="text-white/40">Hasil highlight akan tampil di sini...</span>
-            )}
+          <div className="flex h-[300px] w-full overflow-hidden rounded-[10px] border-[1.5px] border-card-border bg-card-bg shadow-[0_3px_10px_rgba(48,56,65,0.06)]">
+            <LineNumberGutter ref={matchGutterRef} lineCount={text.split("\n").length} />
+            <div
+              onScroll={(e) => {
+                if (matchGutterRef.current) matchGutterRef.current.scrollTop = e.currentTarget.scrollTop;
+              }}
+              className="flex-1 overflow-auto py-4 pr-4 pl-2.5 font-mono text-[13.5px] leading-relaxed text-root-text"
+            >
+              {error ? (
+                <span className="text-text-secondary/50">Perbaiki pola regex untuk melihat hasil.</span>
+              ) : text ? (
+                highlightLines(text, matches).map((nodes, i) => (
+                  <div key={i} className="whitespace-pre-wrap break-words">
+                    {nodes}
+                  </div>
+                ))
+              ) : (
+                <span className="text-text-secondary/50">Hasil highlight akan tampil di sini...</span>
+              )}
+            </div>
           </div>
         </div>
       </div>

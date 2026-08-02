@@ -5,6 +5,7 @@ import ToolPageShell from "@/components/ToolPageShell";
 import Button from "@/components/Button";
 import GlyphBadge from "@/components/GlyphBadge";
 import LineNumberGutter from "@/components/LineNumberGutter";
+import NumberedText from "@/components/NumberedText";
 import JsonTreeView, { type Json } from "@/components/JsonTreeView";
 import {
   FormatIcon,
@@ -33,25 +34,6 @@ const DEFAULT_INPUT = `{
 }`;
 
 const ICON_SIZE = 14;
-
-function NumberedText({ text, accent = false }: { text: string; accent?: boolean }) {
-  return (
-    <div className="font-mono text-[13.5px] leading-relaxed">
-      {text.split("\n").map((line, i) => (
-        <div key={i} className="flex items-start">
-          <span className="w-10 flex-none select-none border-r border-card-border pr-2 text-right text-text-secondary/50">
-            {i + 1}
-          </span>
-          <span
-            className={`whitespace-pre-wrap break-words pl-2.5 ${accent ? "text-accent" : "text-root-text"}`}
-          >
-            {line}
-          </span>
-        </div>
-      ))}
-    </div>
-  );
-}
 
 export default function JsonFormatterPage() {
   const tool = tools.find((t) => t.slug === "json-formatter")!;

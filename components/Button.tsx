@@ -19,7 +19,7 @@ export default function Button({
   return (
     <button
       {...props}
-      className={`rounded-lg px-[18px] py-2.5 text-[13.5px] font-bold cursor-pointer transition-all duration-[120ms] ease-out disabled:pointer-events-none disabled:opacity-50 ${VARIANT_CLASS[variant]} ${className}`}
+      className={`inline-flex items-center gap-1.5 rounded-lg px-[18px] py-2.5 text-[13.5px] font-bold cursor-pointer transition-all duration-[120ms] ease-out disabled:pointer-events-none disabled:opacity-50 ${VARIANT_CLASS[variant]} ${className}`}
     />
   );
 }

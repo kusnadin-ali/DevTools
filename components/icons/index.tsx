@@ -1,6 +1,6 @@
 import type { SVGProps } from "react";
 
-function Icon({ children, ...props }: SVGProps<SVGSVGElement>) {
+export function Icon({ children, ...props }: SVGProps<SVGSVGElement>) {
   return (
     <svg
       viewBox="0 0 24 24"
